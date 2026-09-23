@@ -1,0 +1,17 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images/uploads" # Unde se salvează pozele încărcate de tine
+public_folder: "/images/uploads"
+
+collections:
+  - name: "produse"
+    label: "Figurine"
+    folder: "content/produse"
+    create: true
+    fields:
+      - {label: "Titlu Figurină", name: "title", widget: "string"}
+      - {label: "Categorie", name: "category", widget: "select", options: ["Animale", "Personaje", "Decorațiuni"]}
+      - {label: "Preț (Lei)", name: "price", widget: "string"}
+      - {label: "Imagine", name: "image", widget: "image"}
