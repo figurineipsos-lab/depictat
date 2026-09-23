@@ -28,12 +28,73 @@
 
         <!-- Grilă Produse -->
         <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <!-- Aici se vor încărca automat produsele adăugate din panoul de admin -->
-            <div class="bg-white rounded-xl shadow-md overflow-hidden p-4 text-center">
-                <img src="https://via.placeholder.com/300x200" alt="Exemplu" class="w-full h-48 object-cover rounded-lg mb-4">
-                <h3 class="font-bold text-lg text-neutral-900">Ursuleț Jucăuș</h3>
-                <span class="inline-block bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-full mt-1">Animale</span>
-                <p class="text-neutral-600 font-semibold mt-2">15 Lei</p>
+           <script>
+async function incarcaProduseDinDecapCMS() {
+    const grid = document.getElementById('products-grid');
+    
+    try {
+        // Interogăm API-ul de Git al Netlify pentru folderul content/produse
+        const response = await fetch('/.netlify/git/github/contents/content/produse');
+        
+        if (!response.ok) {
+            throw new Error('Nu s-au putut prelua produsele din repository.');
+        }
+
+        const files = await response.json();
+        
+        // Verificăm dacă folderul nu este gol
+        if (!Array.isArray(files) || files.length === 0) {
+            return;
+        }
+
+        grid.innerHTML = ""; // Golim grid-ul de exemplu
+
+        // Parcurgem fiecare fișier `.md` găsit
+        for (const file of files) {
+            if (file.name.endsWith('.md')) {
+                const fileResponse = await fetch(file.download_url);
+                const markdownText = await fileResponse.text();
+                
+                // Extragem datele din formatul YAML frontmatter
+                const produs = parseFrontmatter(markdownText);
+
+                if (produs && produs.title) {
+                    const productCard = `
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden p-4 text-center">
+                            <img src="${produs.image || 'https://via.placeholder.com/300x200'}" alt="${produs.title}" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <h3 class="font-bold text-lg text-neutral-900">${produs.title}</h3>
+                            <span class="inline-block bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-full mt-1">${produs.category || 'General'}</span>
+                            <p class="text-neutral-600 font-semibold mt-2">${produs.price || '0'} Lei</p>
+                        </div>
+                    `;
+                    grid.innerHTML += productCard;
+                }
+            }
+        }
+    } catch (error) {
+        console.error("Eroare la citirea produselor:", error);
+    }
+}
+
+// Funcție ajutătoare pentru a citi metadata YAML din fișierele Markdown
+function parseFrontmatter(text) {
+    const match = text.match(/---\s*([\s\S]*?)\s*---/);
+    if (!match) return null;
+    
+    const frontmatter = {};
+    match[1].split('\n').forEach(line => {
+        const parts = line.split(':');
+        if (parts.length >= 2) {
+            const key = parts[0].trim();
+            const value = parts.slice(1).join(':').trim().replace(/^["'](.+)["']$/, '$1');
+            frontmatter[key] = value;
+        }
+    });
+    return frontmatter;
+}
+
+document.addEventListener('DOMContentLoaded', incarcaProduseDinDecapCMS);
+</script>
             </div>
         </div>
 
