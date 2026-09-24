@@ -101,14 +101,48 @@
             }
         }
 
-        function afiseazaProduse(lista) {
-            const grid = document.getElementById('products-grid');
-            grid.innerHTML = "";
+        const TELEFON_WHATSAPP = '40720018471'; 
 
-            if (lista.length === 0) {
-                grid.innerHTML = '<p class="col-span-full text-center text-neutral-500">Nu există produse de afișat.</p>';
-                return;
-            }
+function afiseazaProduse(lista) {
+    const grid = document.getElementById('products-grid');
+    grid.innerHTML = "";
+
+    if (lista.length === 0) {
+        grid.innerHTML = '<p class="col-span-full text-center text-neutral-500">Nu există produse de afișat.</p>';
+        return;
+    }
+
+    lista.forEach(produs => {
+        // Generăm mesajul automat pentru WhatsApp
+        const mesajWhatsapp = encodeURIComponent(
+            `Bună ziua! Doresc să comand produsul: "${produs.title}" (${produs.price || '0'} Lei).`
+        );
+        const linkWhatsapp = `https://wa.me/${TELEFON_WHATSAPP}?text=${mesajWhatsapp}`;
+
+        const productCard = `
+            <div class="bg-white rounded-xl shadow-md overflow-hidden p-4 text-center border border-amber-100 flex flex-col justify-between">
+                <div>
+                    <img src="${produs.image || 'https://via.placeholder.com/300x200?text=Fara+Imagine'}" alt="${produs.title}" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="font-bold text-lg text-neutral-900">${produs.title}</h3>
+                    <span class="inline-block bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-full mt-2">${produs.category || 'General'}</span>
+                </div>
+                
+                <div class="mt-4">
+                    <p class="text-amber-900 font-bold text-xl mb-3">${produs.price || '0'} Lei</p>
+                    
+                    <!-- BUTONUL DE CUMPĂRĂ / COMANDĂ -->
+                    <a href="${linkWhatsapp}" target="_blank" class="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-lg shadow transition">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.705 1.754zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.842-1.001z"/>
+                        </svg>
+                        Comandă pe WhatsApp
+                    </a>
+                </div>
+            </div>
+        `;
+        grid.innerHTML += productCard;
+    });
+}
 
             lista.forEach(produs => {
                 const productCard = `
