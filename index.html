@@ -1,16 +1,51 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <title>Depictat.ro - Produse</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atelier Figurine de Ipsos</title>
+    <!-- Tailwind CSS pentru un design modern rapid -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
+<body class="bg-amber-50 text-neutral-800 font-sans">
 
-  <h1>Produsele noastre</h1>
-  <div id="lista-produse"></div>
+    <!-- Header -->
+    <header class="bg-white shadow-sm py-6 px-4 text-center">
+        <h1 class="text-3xl font-bold text-amber-800">Figurine de Ipsos pentru Pictură și Creativitate</h1>
+        <p class="text-neutral-600 mt-2">Alege categoria preferată și descoperă colecția noastră!</p>
+    </header>
 
-  <!-- Pune codul JS chiar aici, înainte de </body> -->
-  <script>
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto p-6">
+        
+        <!-- Filtre Categorii -->
+        <div class="flex flex-wrap justify-center gap-3 mb-8" id="category-filters">
+            <button onclick="filterCategory('all')" class="px-4 py-2 bg-amber-700 text-white rounded-full shadow hover:bg-amber-800 transition">Toate</button>
+            <button onclick="filterCategory('Animale')" class="px-4 py-2 bg-white text-amber-800 border border-amber-300 rounded-full shadow hover:bg-amber-50 transition">Animale</button>
+            <button onclick="filterCategory('Personaje')" class="px-4 py-2 bg-white text-amber-800 border border-amber-300 rounded-full shadow hover:bg-amber-50 transition">Personaje</button>
+            <button onclick="filterCategory('Decorațiuni')" class="px-4 py-2 bg-white text-amber-800 border border-amber-300 rounded-full shadow hover:bg-amber-50 transition">Decorațiuni</button>
+        </div>
+
+        <!-- Grilă Produse -->
+        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <!-- Aici se vor încărca automat produsele adăugate din panoul de admin -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden p-4 text-center">
+                <img src="https://via.placeholder.com/300x200" alt="Exemplu" class="w-full h-48 object-cover rounded-lg mb-4">
+                <h3 class="font-bold text-lg text-neutral-900">Ursuleț Jucăuș</h3>
+                <span class="inline-block bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-full mt-1">Animale</span>
+                <p class="text-neutral-600 font-semibold mt-2">15 Lei</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white text-center py-6 mt-12 border-t border-amber-100 text-sm text-neutral-500">
+        <p>© 2026 Atelier Figurine de Ipsos. Toate drepturile rezervate.</p>
+        <p class="mt-1"><a href="/admin/" class="text-amber-700 underline">Autentificare Panou Admin</a></p>
+    </footer>
+
+   <script>
     async function incarcaProduse() {
       // 1. Schimbă aceste două variabile cu datele tale reale de GitHub:
       const GITHUB_USERNAME = 'figurineipsos-lab';  // Numele contului/organizației de GitHub
@@ -36,5 +71,6 @@
     // Apelăm funcția când se încarcă pagina
     incarcaProduse();
   </script>
+
 </body>
 </html>
